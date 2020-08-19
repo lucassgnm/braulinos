@@ -16,7 +16,7 @@ class Login_Model extends Model
             ':email' => $email,
             ':senha' => $senha
         );
-        $result = $this->db->select("SELECT nomecompleto,cpf FROM braulinosdb.usuario WHERE 
+        $result = $this->db->select("SELECT id,nomecompleto,cpf FROM braulinosdb.usuario WHERE 
                 email = :email AND senha = :senha", $dados);
 
         $count = count($result);
@@ -27,6 +27,7 @@ class Login_Model extends Model
             Session::set('nome', $result[0]->nomecompleto);
             Session::set('logado', true);
             Session::set('cpf', $result[0]->cpf);
+            Session::set('id', $result[0]->id);
             Session::set('tipo', 0);
             echo ("OK");
         } else {
@@ -62,11 +63,19 @@ class Login_Model extends Model
                 'senha' => $senha,
                 'tipo' => 0
             ));
-    
+
+            $dados = array(
+                ':email' => $email,
+                ':senha' => $senha
+            );
+            $result = $this->db->select("SELECT id FROM braulinosdb.usuario WHERE 
+                    email = :email AND senha = :senha", $dados);
+
             Session::init();
             Session::set('nome', $nomecompleto);
             Session::set('logado', true);
             Session::set('cpf', $cpf);
+            Session::set('id', $result[0]->id);
             Session::set('tipo', 0);
             echo ("OK");
         }

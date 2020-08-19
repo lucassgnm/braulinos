@@ -31,4 +31,9 @@ class Dashboard extends Controller
     {
         $this->model->dashLogout();
     }
+    
+    function listaAgendamentosCliente()
+    {
+        $this->model->listaAgendamentosCliente();
+    }
 }
