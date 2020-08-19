@@ -16,7 +16,7 @@ class Logout extends Controller {
     {
         $this->model->logout();
 		
-		 $this->view->title = 'Logout';
+		$this->view->title = 'Logout';
 		$this->view->render('header');
         $this->view->render('logout/index');
 		$this->view->render('footer');

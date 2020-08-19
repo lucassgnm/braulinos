@@ -257,7 +257,7 @@
 		<div class="row">
 			<div class="col-md-12 ">
 				<div class="error-text">
-					<h1 class="error">404 Error</h1>
+					<h1 class="error">você daiu da Braulino's</h1>
 					<div class="im-sheep">
 						<div class="top">
 							<div class="body"></div>

@@ -7,25 +7,68 @@ class Login_Model extends Model
         parent::__construct();
     }
 
-    public function ver()
+    public function checkLogin()
     {
-		$dados=array(':cpf' => $_POST['txtcpf'],':senha' => $_POST['txtsenha']);
-        $result = $this->db->select("SELECT cpf,nome FROM dbclientes.cliente WHERE 
-                cpf = :cpf AND senha = sha2(:senha,256)",$dados);
-                
+        $email = strtoupper($_POST['email']);
+        $senha = strtoupper(hash('sha256', $_POST['senha']));
+
+        $dados = array(
+            ':email' => $email,
+            ':senha' => $senha
+        );
+        $result = $this->db->select("SELECT nomecompleto,cpf FROM braulinosdb.usuario WHERE 
+                email = :email AND senha = :senha", $dados);
+
         $count = count($result);
 
         if ($count > 0) {
             // login
             Session::init();
-            Session::set('nome', $result[0]->nome);
+            Session::set('nome', $result[0]->nomecompleto);
             Session::set('logado', true);
             Session::set('cpf', $result[0]->cpf);
-            echo("OK");
+            Session::set('tipo', 0);
+            echo ("OK");
         } else {
-            echo("Dados Incorretos.");
+            echo ("Dados Incorretos.");
         }
-        
     }
+
+    public function cadastrarCliente()
+    {
+        $cpf = preg_replace("/[^0-9]/", "", $_POST['cpf']);
+        $celular = preg_replace("/[^0-9]/", "", $_POST['celular']);
+        $nomecompleto = strtoupper($_POST['nomecompleto']);
+        $email = strtoupper($_POST['email']);
+        $senha = strtoupper(hash('sha256', $_POST['senha']));
+
+        $dados = array(
+            ':email' => $email,
+            ':senha' => $senha
+        );
+        $result = $this->db->select("SELECT nomecompleto,cpf FROM braulinosdb.usuario WHERE 
+                email = :email AND senha = :senha", $dados);
+
+        $count = count($result);
+
+        if ($count > 0) {
+            echo ("Usuário ja existe, faça o login.");
+        } else {
+            $this->db->insert('braulinosdb.usuario', array(
+                'cpf' => $cpf,
+                'celular' => $celular,
+                'nomecompleto' => $nomecompleto,
+                'email' => $email,
+                'senha' => $senha,
+                'tipo' => 0
+            ));
     
+            Session::init();
+            Session::set('nome', $nomecompleto);
+            Session::set('logado', true);
+            Session::set('cpf', $cpf);
+            Session::set('tipo', 0);
+            echo ("OK");
+        }
+    }
 }

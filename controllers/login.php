@@ -9,12 +9,18 @@ class Login extends Controller {
     
     function index() {
         $this->view->title = 'Identificação do Cliente';
-		$this->view->render('header');
+		//$this->view->render('header');
         $this->view->render('login/index');
-		$this->view->render('footer');
+		//$this->view->render('footer');
     }
-     function ver()
+
+    function checkLogin()
     {
-        $this->model->ver();
+        $this->model->checkLogin();
+    }
+
+    function cadastrarCliente()
+    {
+        $this->model->cadastrarCliente();
     }
 }
