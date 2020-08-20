@@ -16,7 +16,7 @@ class Login_Model extends Model
             ':email' => $email,
             ':senha' => $senha
         );
-        $result = $this->db->select("SELECT id,nomecompleto,cpf FROM braulinosdb.usuario WHERE 
+        $result = $this->db->select("SELECT id,nomecompleto,cpf,tipo FROM braulinosdb.usuario WHERE 
                 email = :email AND senha = :senha", $dados);
 
         $count = count($result);
@@ -28,8 +28,13 @@ class Login_Model extends Model
             Session::set('logado', true);
             Session::set('cpf', $result[0]->cpf);
             Session::set('idusuario', $result[0]->id);
-            Session::set('tipo', 0);
-            echo ("OK");
+            Session::set('tipo', $result[0]->tipo);
+
+            if ($result[0]->tipo == 1) {
+                echo ("OKADMIN");
+            } else {
+                echo ("OK");
+            }
         } else {
             echo ("Dados Incorretos.");
         }

@@ -28,7 +28,10 @@ $(document).ready(function () {
             $.post("checkLogin/", $("#frmLogar").serialize(), function (data) {
                 if (data == "OK") {
                     window.location = '../dashboard/';
-                } else {
+                } else if (data == "OKADMIN") {
+                    window.location = '../admin/';
+                }
+                else {
                     toastr.warning(data);
                 }
             });

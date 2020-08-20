@@ -1,6 +1,6 @@
 <?php
 
-class Dashboard_Model extends Model
+class Admin_Model extends Model
 {
     public function __construct()
     {
@@ -39,13 +39,10 @@ class Dashboard_Model extends Model
         $idusuario = Session::get('idusuario');
         $tipo = Session::get('tipo');
 
-        $dados = array(
-            ':idusuario' => $idusuario,
-        );
+        
         $result = $this->db->select("SELECT a.id, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
                                         JOIN braulinosdb.procedimento p ON a.procedimento = p.id
-                                        WHERE idusuario = :idusuario
-                                        ORDER BY a.data desc", $dados);
+                                        ORDER BY a.data desc");
 
         echo json_encode($result);
     }
@@ -88,31 +85,12 @@ class Dashboard_Model extends Model
 
     public function delAgendamento($id)
     {
+        $id = (int)$id;
+        $this->db->delete('braulinosdb.agendamento', 'id =' . $id);
         $dados = array(
-            ':id' => $id,
+            "code" => 1,
+            "msg" => "Agendamento cancelado com sucesso!"
         );
-        $result = $this->db->select("SELECT data FROM braulinosdb.agendamento
-                                        WHERE id = :id", $dados);
-        $somentedata = $result[0]->data;
-
-        $data_inicial = new DateTime($somentedata);
-        $data_final = new DateTime('now');
-        $diferenca = $data_inicial->diff($data_final);
-        $diferenca = $diferenca->format('%d');
-
-        if ($diferenca <= 2) {
-            $dados = array(
-                "code" => 0,
-                "msg" => "O agendamento não pode ser cancelado pois faltam apenas " . $diferenca . " dias para a data escolhida. Ligue para a braulinos para efetuar o cancelamento"
-            );
-        } else {
-            $id = (int)$id;
-            $this->db->delete('braulinosdb.agendamento', 'id =' . $id);
-            $dados = array(
-                "code" => 1,
-                "msg" => "Agendamento cancelado com sucesso!"
-            );
-        }
         echo json_encode($dados);
     }
 
@@ -127,36 +105,18 @@ class Dashboard_Model extends Model
         $horario = $_POST["horario"];
         $dataprocedimento = $_POST["dataprocedimento"];
 
+        $id = (int)$id;
         $dados = array(
-            ':id' => $id,
+            "procedimento" => $procedimento,
+            "horario" => $horario,
+            'data' => $dataprocedimento,
         );
-        $result = $this->db->select("SELECT data FROM braulinosdb.agendamento
-                                        WHERE id = :id", $dados);
-        $somentedata = $result[0]->data;
+        $this->db->update('braulinosdb.agendamento', $dados, 'id =' . $id);
+        $dados = array(
+            "code" => 1,
+            "msg" => "Agendamento editado com sucesso!"
+        );
 
-        $data_inicial = new DateTime($somentedata);
-        $data_final = new DateTime('now');
-        $diferenca = $data_inicial->diff($data_final);
-        $diferenca = $diferenca->format('%d');
-
-        if ($diferenca <= 2) {
-            $dados = array(
-                "code" => 0,
-                "msg" => "O agendamento não pode ser editado pois faltam apenas " . $diferenca . " dias para a data escolhida. Ligue para a braulinos para editar."
-            );
-        } else {
-            $id = (int)$id;
-            $dados = array(
-                "procedimento" => $procedimento,
-                "horario" => $horario,
-                'data' => $dataprocedimento,
-            );
-            $this->db->update('braulinosdb.agendamento', $dados, 'id =' . $id);
-            $dados = array(
-                "code" => 1,
-                "msg" => "Agendamento editado com sucesso!"
-            );
-        }
         echo json_encode($dados);
     }
 

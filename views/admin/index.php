@@ -297,7 +297,6 @@
                         <th>ID</th>
                         <th>Procedimento</th>
                         <th>Horário</th>
-                        <th>Dia</th>
                         <th class="text-center">Opcões</th>
                     </tr>
                 </thead>
