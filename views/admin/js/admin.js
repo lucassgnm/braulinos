@@ -100,6 +100,11 @@ $(document).ready(function () {
 
         $("#modaledit").modal("show");
     });
+
+    $("#inputFiltra").keyup(function () {
+        str = $("#inputFiltra").val()
+        carregaTabelaFiltro(str);
+    });
 });
 
 //FUNCOES --------------------------------------------
@@ -188,6 +193,30 @@ function carregaTabela() {
         $("#linhas").html(result);
     });
 }
+
+// POPULA A TABELA
+function carregaTabelaFiltro(filtro) {
+    if (filtro == "") {
+        carregaTabela();
+    } else {
+        $.post("listaAgendamentosFiltro/" + filtro + "").done(function (data) {
+            dados = JSON.parse(data);
+            result = "";
+            for (var i = 0; i < dados.length; i++) {
+                result += "<tr>";
+                result += "<td>" + dados[i].id + "</td>";
+                result += "<td>" + primeiroNome(dados[i].nomecompleto) + "</td>";
+                result += "<td>" + dados[i].nome + "</td>";
+                result += "<td>" + dados[i].horario + "</td>";
+                result += "<td>" + dateToBR(dados[i].data) + "</td>";
+                result += '<td class="text-center"><button onclick=editarItem(' + dados[i].id + '); class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Editar</button> <button onclick=excluirItemConfirm(' + dados[i].id + '); class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Cancelar</button></td>';
+                result += "</tr>";
+            }
+    
+            $("#linhas").html(result);
+        });
+    }
+}
 // POPULANDO OS SELECTS
 /** @description Popula o select dos procedimentos.*/
 function populaProcedimento() {
@@ -214,31 +243,29 @@ function populaHorario() {
 
 /** @description Deixa disponivel no mínimo a data atual no input type="date"*/
 function calendarioHoje() {
-     var today = new Date();
-     var dd = today.getDate();
-     var mm = today.getMonth() + 1; //January is 0!
-     var yyyy = today.getFullYear();
-     if (dd < 10) {
-         dd = '0' + dd
-     }
-     if (mm < 10) {
-         mm = '0' + mm
-     }
-     today = yyyy + '-' + mm + '-' + dd;
-     document.getElementById("dataInput").setAttribute("min", today);
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("dataInput").setAttribute("min", today);
 }
 
-function dateToEN(date)
-{	
-	return date.split('/').reverse().join('-');
+function dateToEN(date) {
+    return date.split('/').reverse().join('-');
 }
 
-function dateToBR(date)
-{	
+function dateToBR(date) {
     return date.split('-').reverse().join('/');
 }
 
 function primeiroNome(nomeCompleto) {
     return fullName = nomeCompleto.split(' '),
-    firstName = fullName[0];
+        firstName = fullName[0];
 }

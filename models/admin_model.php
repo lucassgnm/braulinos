@@ -32,19 +32,24 @@ class Admin_Model extends Model
 
     public function listaAgendamentosCliente()
     {
-        Session::init();
-        $nome = Session::get('nome');
-        $logado = Session::get('logado');
-        $cpf = Session::get('cpf');
-        $idusuario = Session::get('idusuario');
-        $tipo = Session::get('tipo');
-
-        
         $result = $this->db->select("SELECT a.id, u.nomecompleto, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
                                         JOIN braulinosdb.procedimento p ON a.procedimento = p.id
                                         JOIN braulinosdb.usuario u ON a.idusuario = u.id
                                         ORDER BY a.data desc");
 
+        echo json_encode($result);
+    }
+
+    public function listaAgendamentosFiltro($filtro)
+    {
+        $dados = array(
+            ":filtro" => $filtro."%"
+        );
+        $result = $this->db->select("SELECT a.id, u.nomecompleto, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
+                                        JOIN braulinosdb.procedimento p ON a.procedimento = p.id
+                                        JOIN braulinosdb.usuario u ON a.idusuario = u.id
+                                        WHERE u.nomecompleto LIKE :filtro
+                                        ORDER BY a.data desc", $dados);
         echo json_encode($result);
     }
 

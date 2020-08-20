@@ -293,6 +293,7 @@
             <table class="table custab" id="custab">
                 <thead>
                     <button id="btnNew" class="btn btn-primary pull-right" style="margin-bottom: 10px;"><b>+</b> Fazer novo agendamento</button>
+                    <input type="text" class="pull-right input-right form-control" id="inputFiltra" style="width: 200px; margin-right: 20px;" placeholder="Filtrar por nome">
                     <tr>
                         <th>ID</th>
                         <th>Nome do(a) cliente</th>

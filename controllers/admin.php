@@ -37,6 +37,11 @@ class Admin extends Controller
         $this->model->listaAgendamentosCliente();
     }
     
+    function listaAgendamentosFiltro($filtro)
+    {
+        $this->model->listaAgendamentosFiltro($filtro);
+    }
+
     function getProcedimento()
     {
         $this->model->getProcedimento();
