@@ -72,17 +72,34 @@ class Dashboard_Model extends Model
         Session::init();
         $idusuario = Session::get('idusuario');
 
-        $this->db->insert('braulinosdb.agendamento', array(
-            'procedimento' => $procedimento,
-            'horario' => $horario,
-            'idusuario' => $idusuario,
-            'data' => $dataprocedimento,
-            'status' => 1
-        ));
         $dados = array(
-            "code" => 1,
-            "msg" => "Agendamento realizado com sucesso!"
+            ':horario' => $horario,
+            ':data' => $dataprocedimento
         );
+
+        $result = $this->db->select("SELECT id FROM braulinosdb.agendamento WHERE 
+                horario = :horario AND data = :data", $dados);
+
+        $count = count($result);
+
+        if ($count > 0) {
+            $dados = array(
+                "code" => 0,
+                "msg" => "Esse horario já está agendado, por favor tente outro!"
+            );
+        } else {
+            $this->db->insert('braulinosdb.agendamento', array(
+                'procedimento' => $procedimento,
+                'horario' => $horario,
+                'idusuario' => $idusuario,
+                'data' => $dataprocedimento,
+                'status' => 1
+            ));
+            $dados = array(
+                "code" => 1,
+                "msg" => "Agendamento realizado com sucesso!"
+            );
+        }
         echo json_encode($dados);
     }
 

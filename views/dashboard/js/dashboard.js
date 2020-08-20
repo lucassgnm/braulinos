@@ -78,8 +78,10 @@ $(document).ready(function () {
                 if (dados["code"] == 1) {
                     toastr.success(dados["msg"]);
                     carregaTabela();
+                } if (dados["code"] == 0) {
+                    toastr.warning(dados["msg"]);
                 } else {
-                    toastr.error("Houve um erro na sua solicitação")
+                    //toastr.error("Houve um erro na sua solicitação");
                 }
             });
         }
@@ -213,26 +215,24 @@ function populaHorario() {
 
 /** @description Deixa disponivel no mínimo a data atual no input type="date"*/
 function calendarioHoje() {
-     var today = new Date();
-     var dd = today.getDate();
-     var mm = today.getMonth() + 1; //January is 0!
-     var yyyy = today.getFullYear();
-     if (dd < 10) {
-         dd = '0' + dd
-     }
-     if (mm < 10) {
-         mm = '0' + mm
-     }
-     today = yyyy + '-' + mm + '-' + dd;
-     document.getElementById("dataInput").setAttribute("min", today);
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("dataInput").setAttribute("min", today);
 }
 
-function dateToEN(date)
-{	
-	return date.split('/').reverse().join('-');
+function dateToEN(date) {
+    return date.split('/').reverse().join('-');
 }
 
-function dateToBR(date)
-{	
+function dateToBR(date) {
     return date.split('-').reverse().join('/');
 }
