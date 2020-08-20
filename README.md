@@ -23,9 +23,14 @@ Foram aplicados apenas testes funcionais.
 
 ![diagram](https://user-images.githubusercontent.com/47739034/90813265-b933bb80-e2fd-11ea-8242-99528ba7c2c4.png)
 
-<p>Guia de instalação:</p>
-- Ter o Xampp, Wamp ou outro; 
-- Clonar o repositório;
-- Fazer o import do arquivo dump **_(braulinosdb.sql)_**;
-- Alterar as configurações do arquivo **_(config.php)_** para a sua configuração;
-- Iniciar a aplicação no caminho **_(braulinos/login/)_**.
+<p><b>Guia de instalação:</b></p>
+
+* Ter o Xampp, Wamp ou outro;
+
+* Clonar o repositório;
+
+* Fazer o import do arquivo dump **_(braulinosdb.sql)_**;
+
+* Alterar as configurações do arquivo **_(config.php)_** para a sua configuração;
+
+* Iniciar a aplicação no caminho **_(braulinos/login/)_**.
