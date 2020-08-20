@@ -40,8 +40,9 @@ class Admin_Model extends Model
         $tipo = Session::get('tipo');
 
         
-        $result = $this->db->select("SELECT a.id, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
+        $result = $this->db->select("SELECT a.id, u.nomecompleto, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
                                         JOIN braulinosdb.procedimento p ON a.procedimento = p.id
+                                        JOIN braulinosdb.usuario u ON a.idusuario = u.id
                                         ORDER BY a.data desc");
 
         echo json_encode($result);

@@ -6,16 +6,16 @@ class Admin extends Controller
     function __construct()
     {
         parent::__construct();
-        $this->view->js = array('dashboard/js/dashboard.js');
+        $this->view->js = array('admin/js/admin.js');
     }
 
     function index()
     {
         Session::init();
-        if (Session::get("nome" ) != "") {
-            $this->view->title = 'Dashboard';
+        if (Session::get("tipo" ) == 1) {
+            $this->view->title = 'Admin';
             //$this->view->render('header');
-            $this->view->render('dashboard/index');
+            $this->view->render('admin/index');
             //$this->view->render('footer');
         } else {
             $this->view->render('error/index');

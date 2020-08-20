@@ -295,8 +295,10 @@
                     <button id="btnNew" class="btn btn-primary pull-right" style="margin-bottom: 10px;"><b>+</b> Fazer novo agendamento</button>
                     <tr>
                         <th>ID</th>
+                        <th>Nome do(a) cliente</th>
                         <th>Procedimento</th>
                         <th>Horário</th>
+                        <th>Dia</th>
                         <th class="text-center">Opcões</th>
                     </tr>
                 </thead>
