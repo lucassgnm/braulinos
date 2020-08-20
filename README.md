@@ -29,7 +29,7 @@ Foram aplicados apenas testes funcionais.
 
 * Clonar o repositório;
 
-* Fazer o import do arquivo dump **_(braulinosdb.sql)_**;
+* Fazer o import do arquivo dump **_(braulinosdb.sql)_** / pasta raiz do projeto;
 
 * Alterar as configurações do arquivo **_(config.php)_** para a sua configuração;
 
