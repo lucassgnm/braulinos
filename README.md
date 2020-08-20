@@ -29,8 +29,8 @@ Foram aplicados apenas testes funcionais.
 
 * Clonar o repositório;
 
-* Fazer o import do arquivo dump **_(braulinosdb.sql)_** / pasta raiz do projeto;
+* Fazer o import do arquivo dump **_braulinosdb.sql_** / pasta raiz do projeto;
 
-* Alterar as configurações do arquivo **_(config.php)_** para a sua configuração;
+* Alterar as configurações do arquivo **_config.php_** para a sua configuração / pasta raiz do projeto;
 
-* Iniciar a aplicação no caminho **_(braulinos/login/)_**.
+* Iniciar a aplicação no caminho **_braulinos/login/_**.
