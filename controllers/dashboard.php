@@ -36,4 +36,29 @@ class Dashboard extends Controller
     {
         $this->model->listaAgendamentosCliente();
     }
+    
+    function getProcedimento()
+    {
+        $this->model->getProcedimento();
+    }
+
+    function addAgendamento()
+    {
+        $this->model->addAgendamento();
+    }
+
+    function updAgendamento($id)
+    {
+        $this->model->updAgendamento($id);
+    }
+    
+    function delAgendamento($id)
+    {
+        $this->model->delAgendamento($id);
+    }
+    
+    function getHorario()
+    {
+        $this->model->getHorario();
+    }
 }

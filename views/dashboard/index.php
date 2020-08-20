@@ -8,17 +8,19 @@
 
     <!-- Bootstrap CSS -->
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href='https://use.fontawesome.com/releases/v5.8.1/css/all.css'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
+    <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="<?= URL; ?>/public/bs/css/bootstrap.min.css">
+
 
     <title><?= $this->title; ?></title>
 
 </head>
 
 <body>
-
     <style>
         * {
             margin: 0;
@@ -211,61 +213,167 @@
         }
 
         /* ---------------- TABELA ------------------ */
+        .custab {
+            border: 1px solid black;
+            padding: 5px;
+            margin: 5% 0;
+            box-shadow: 3px 3px 2px black;
+            transition: 0.5s;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
 
-        
+        .custab:hover {
+            box-shadow: 3px 3px 0px transparent;
+            transition: 0.5s;
+        }
+
+        .custyle {
+            margin-left: 330px;
+        }
+
+        .pull-right {
+            margin-top: 20px;
+        }
+
+        /* modal */
+        .modal-content.head {
+            border: 1px solid black;
+            padding: 5px;
+            margin: 5% 0;
+            box-shadow: 3px 3px 2px black;
+            transition: 0.5s;
+            background-color: rgba(142, 36, 170, 0.9);
+        }
+
+        /* confirm modal */
     </style>
 
-    <nav>
-        <div class="logo">Braulino's</div>
-        <button type="button" class="toggleMenu btn btn-warning" id="escondeMenu" style="margin-right: 40px;">Esconder menu</button>
-        <button type="button" class="toggleMenu btn btn-warning" id="mostraMenu" style="margin-right: 40px;">Mostrar menu</button>
-        <div class="icon" id="bell">
-            <img src="<?= URL ?>public/images/notficon.png" alt="">
+    <section>
+        <nav>
+            <div class="logo">Braulino's</div>
+            <button type="button" class="toggleMenu btn btn-warning" id="escondeMenu" style="margin-right: 40px;">Esconder menu</button>
+            <button type="button" class="toggleMenu btn btn-warning" id="mostraMenu" style="margin-right: 40px;">Mostrar menu</button>
+            <div class="icon" id="bell">
+                <img src="<?= URL ?>public/images/notficon.png" alt="">
+            </div>
+            <div class="notifications" id="box">
+                <h2>Notificações <span>(2)</span></h2>
+                <div class="notifications-item"> <img src="<?= URL ?>public/images/notf1.jpg" alt="img">
+                    <div class="text">
+                        <h4 id="h4name"></h4>
+                        <p>Agora você pode agendar seu horário no Braulino's <span>ONLINE</span>!</p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+
+    <section>
+        <div class="wrapper d-flex" id="sidebar">
+            <div class="sidebar"> <small class="text-muted pl-3">GERAL</small>
+                <ul>
+                    <li>
+                        <a href="<?= URL ?>dashboard/"><i class="fas fa-home"></i>Dashboard</a>
+                    </li>
+                </ul>
+                <small class="text-muted px-3">CONTA</small>
+                <ul>
+                    <li>
+                        <a href="" id="dashLogout"><i class="fas fa-sign-out-alt"></i>Sair</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="notifications" id="box">
-            <h2>Notificações <span>(2)</span></h2>
-            <div class="notifications-item"> <img src="<?= URL ?>public/images/notf1.jpg" alt="img">
-                <div class="text">
-                    <h4 id="h4name"></h4>
-                    <p>Agora você pode agendar seu horário no Braulino's <span>ONLINE</span>!</p>
+    </section>
+
+    <!-- Teste Tabela -->
+    <section>
+        <div class="row col-md-9 custyle">
+            <table class="table custab" id="custab">
+                <thead>
+                    <button id="btnNew" class="btn btn-primary pull-right" style="margin-bottom: 10px;"><b>+</b> Fazer novo agendamento</button>
+                    <tr>
+                        <th>ID</th>
+                        <th>Procedimento</th>
+                        <th>Horário</th>
+                        <th class="text-center">Opcões</th>
+                    </tr>
+                </thead>
+                <tbody id="linhas">
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- Fim teste Tabela -->
+
+    <!-- Modal inicio -->
+    <section>
+        <div class="modal modaledit" id="modaledit" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content head">
+                    <div class="modal-header">
+                        <h5 class="modal-title"> </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Procedimento:</p>
+                        <select class="form-control" id="selProcedimento">
+                            <!-- selProcedimento -->
+                        </select>
+                        <p style="margin-top: 20px;">Dia:</p>
+                        <input id="dataInput" style="color: black; padding-left: 10px;" type="date">
+                        <p style="margin-top: 20px;">Horário:</p>
+                        <select class="form-control" id="selHorario">
+                            <!-- selHorario -->
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="btnSalvaEdit">Salvar edições</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="btnAdiciona">Adicionar</button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
+    </section>
+    <!-- Modal fim -->
 
-
-    <div class="wrapper d-flex" id="sidebar">
-        <div class="sidebar"> <small class="text-muted pl-3">GERAL</small>
-            <ul>
-                <li>
-                    <a href="<?= URL ?>dashboard/"><i class="fas fa-home"></i>Dashboard</a>
-                </li>
-            </ul>
-            <small class="text-muted px-3">CONTA</small>
-            <ul>
-                <li>
-                    <a href="" id="dashLogout"><i class="fas fa-sign-out-alt"></i>Sair</a>
-                </li>
-            </ul>
+    <!-- Modal confirm -->
+    <div class="modal modalconfirm" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content head">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: 20px;">Tem certeza que deseja cancelar o agendamento n: <label id="labelIdDelete"></label> ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="btnOkCancelaAgendamento">Cancelar agendamento</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar janela</button>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Teste Tabela -->
-    
-
-    <!-- Fim teste Tabela -->
+    <!-- Modal confirm -->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script> -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-    <script src="<?= URL; ?>/public/bs/js/tabledit.min.js"></script>
+    <!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script> -->
     <script src="<?= URL; ?>/public/bs/js/jquery.mask.js"></script>
+    <script src="<?= URL; ?>/public/bs/js/bootstrap.min.js"></script>
     <?php
     if (isset($this->js)) {
         foreach ($this->js as $js) {

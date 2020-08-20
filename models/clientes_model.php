@@ -29,7 +29,7 @@ class Clientes_Model extends Model {
         $senha  = $_POST['txtsenha'];
         
         $this->db->insert('cliente', array('codigo' =>$codigo,'cpf'=>$cpf,'nome'=>$nome,'endereco'=>$end,'telefone'=>$fone,'senha'=>hash('sha256',$senha)));
-       echo "Dados Inseridos com Sucesso";
+        echo "Dados Inseridos com Sucesso";
     }
 	
 	public function del() 

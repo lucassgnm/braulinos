@@ -27,7 +27,7 @@ class Login_Model extends Model
             Session::set('nome', $result[0]->nomecompleto);
             Session::set('logado', true);
             Session::set('cpf', $result[0]->cpf);
-            Session::set('id', $result[0]->id);
+            Session::set('idusuario', $result[0]->id);
             Session::set('tipo', 0);
             echo ("OK");
         } else {
@@ -75,7 +75,7 @@ class Login_Model extends Model
             Session::set('nome', $nomecompleto);
             Session::set('logado', true);
             Session::set('cpf', $cpf);
-            Session::set('id', $result[0]->id);
+            Session::set('idusuario', $result[0]->id);
             Session::set('tipo', 0);
             echo ("OK");
         }
