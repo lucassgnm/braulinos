@@ -50,20 +50,29 @@ class Admin_Model extends Model
 
     public function listaUltimaSemana()
     {
-        $datahora = date_create()->format('Y-m-d') . " 00:00:00.0";
-        $dados = array(
-            ":datahora" => $datahora
-        );
-        $result = $this->db->select("select c.id, c.nomecompleto, c.nome, c.status, c.datahora, c.horario 
-                                    from (select b.id, b.nomecompleto, b.nome, b.status, b.horario, convert(b.datahora, datetime) datahora 
-                                        from (select a.id, u.nomecompleto, p.nome, a.status, a.horario, concat(a.`data`,' 00:00:00') as datahora 
-                                            from braulinosdb.agendamento a
-                                            join braulinosdb.procedimento p ON a.procedimento = p.id
-                                            join braulinosdb.usuario u ON a.idusuario = u.id) b) c
-                                            where c.datahora < :datahora
-                                            order by c.datahora asc", $dados);
+        $result = $this->db->select("select *
+        from (select b.id, b.nomecompleto, b.nome, b.status, b.horario, b.data, convert(b.datahora, datetime) datahora 
+              from (select a.id, u.nomecompleto, p.nome, a.status, a.horario, a.data, concat(a.`data`,' 00:00:00') as datahora 
+                    from braulinosdb.agendamento a
+                    join braulinosdb.procedimento p ON a.procedimento = p.id
+                    join braulinosdb.usuario u ON a.idusuario = u.id) b) c
+                    where c.datahora between date_sub(now(),INTERVAL 1 WEEK) and now()");
 
-        var_dump(json_encode($result));
+        echo json_encode($result);
+    }
+
+    public function listaUltimaSemanaGrafico()
+    {
+        $result = $this->db->select("select c.data, count(c.id) qtd
+        from (select b.id, b.nomecompleto, b.nome, b.data, b.status, convert(b.datahora, datetime) datahora 
+              from (select a.id, u.nomecompleto, p.nome, a.data, a.status, concat(a.`data`,' 00:00:00') as datahora 
+                    from braulinosdb.agendamento a
+                    join braulinosdb.procedimento p ON a.procedimento = p.id
+                    join braulinosdb.usuario u ON a.idusuario = u.id) b) c
+                    where c.datahora between date_sub(now(),INTERVAL 1 WEEK) and now()
+                   group by c.datahora;");
+
+        echo json_encode($result);
     }
 
     public function listaAgendamentosFiltro($filtro)

@@ -42,6 +42,11 @@ class Admin extends Controller
         $this->model->listaUltimaSemana();
     }
     
+    function listaUltimaSemanaGrafico()
+    {
+        $this->model->listaUltimaSemanaGrafico();
+    }
+    
     function listaAgendamentosFiltro($filtro)
     {
         $this->model->listaAgendamentosFiltro($filtro);

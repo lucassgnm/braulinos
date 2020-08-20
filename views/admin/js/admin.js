@@ -1,6 +1,7 @@
 $(document).ready(function () {
     toastr.options.positionClass = 'toast-top-center';
 
+    $("#allChart").hide();
     carregaTabela();
 
     $.post("sessaoUsuario/").done(function (data) {
@@ -12,9 +13,47 @@ $(document).ready(function () {
             toastr.warning(data);
         }
     });
-    $.post("listaUltimaSemana/").done(function (data) {
-        dados = JSON.parse(data);
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: carregaDatasChart(),
+            datasets: [{
+                label: 'Numero de agendamentos',
+                data: carregaQtsChart(),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(0, 15, 156, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(0, 15, 156, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
     });
+
 
     var down = false;
 
@@ -104,10 +143,49 @@ $(document).ready(function () {
         $("#modaledit").modal("show");
     });
 
+    $("#goToEstatisticas").click(function (e) {
+        e.preventDefault();
+        $("#allTable").hide();
+        $("#allChart").show();
+    });
+
+    $("#btnFiltraSemana").click(function (e) {
+        e.preventDefault();
+        $.post("listaUltimaSemana/").done(function (data) {
+            dados = JSON.parse(data);
+
+            result = "";
+
+            for (var i = 0; i < dados.length; i++) {
+                result += "<tr>";
+                result += "<td>" + dados[i].id + "</td>";
+                result += "<td>" + primeiroNome(dados[i].nomecompleto) + "</td>";
+                result += "<td>" + dados[i].nome + "</td>";
+                result += "<td>" + dados[i].horario + "</td>";
+                result += "<td>" + dateToBR(dados[i].data) + "</td>";
+                result += '<td class="text-center"><button onclick=editarItem(' + dados[i].id + '); class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Editar</button> <button onclick=excluirItemConfirm(' + dados[i].id + '); class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Cancelar</button></td>';
+                result += "</tr>";
+            }
+            result += "<tr>";
+            result += "<td></td>";
+            result += "<td></td>";
+            result += "<td></td>";
+            result += "<td></td>";
+            result += "<td></td>";
+            result += "<td>" + dados.length + " resultados encontrados</td>";
+            result += "</tr>";
+
+            $("#linhas").html(result);
+        });
+    });
+
     $("#inputFiltra").keyup(function () {
         str = $("#inputFiltra").val()
         carregaTabelaFiltro(str);
     });
+
+    /////////////////////////////////// chart
+
 });
 
 //FUNCOES --------------------------------------------
@@ -215,7 +293,7 @@ function carregaTabelaFiltro(filtro) {
                 result += '<td class="text-center"><button onclick=editarItem(' + dados[i].id + '); class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Editar</button> <button onclick=excluirItemConfirm(' + dados[i].id + '); class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Cancelar</button></td>';
                 result += "</tr>";
             }
-    
+
             $("#linhas").html(result);
         });
     }
@@ -272,3 +350,27 @@ function primeiroNome(nomeCompleto) {
     return fullName = nomeCompleto.split(' '),
         firstName = fullName[0];
 }
+
+function carregaDatasChart() {
+    var datas = [];
+    $.post("listaUltimaSemanaGrafico/").done(function (data) {
+        dados = JSON.parse(data);
+        for (let i = 0; i < dados.length; i++) {
+            datas.push(dateToBR(dados[i].data));
+        }
+    });
+    return datas;
+};
+
+function carregaQtsChart() {
+    var qtd = [];
+    $.post("listaUltimaSemanaGrafico/").done(function (data) {
+        dados = JSON.parse(data);
+        
+        for (let i = 0; i < dados.length; i++) {
+            qtd.push(dados[i].qtd);
+        }
+        return qtd;
+    });
+    return qtd;
+};

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
     <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="<?= URL; ?>/public/bs/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" />
 
 
     <title><?= $this->title; ?></title>
@@ -245,7 +246,8 @@
             background-color: rgba(142, 36, 170, 0.9);
         }
 
-        /* confirm modal */
+        /* cgrafico */
+
     </style>
 
     <section>
@@ -274,7 +276,10 @@
             <div class="sidebar"> <small class="text-muted pl-3">GERAL</small>
                 <ul>
                     <li>
-                        <a href="<?= URL ?>dashboard/"><i class="fas fa-home"></i>Dashboard</a>
+                        <a href="<?= URL ?>admin/"><i class="fas fa-home"></i>Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#" id="goToEstatisticas"><i class="fas fa-chart-line"></i>Estatísticas</a>
                     </li>
                 </ul>
                 <small class="text-muted px-3">CONTA</small>
@@ -287,87 +292,96 @@
         </div>
     </section>
 
-    <!-- Teste Tabela -->
-    <section>
-        <div class="row col-md-9 custyle">
-            <table class="table custab" id="custab">
-                <thead>
-                    <button id="btnNew" class="btn btn-primary pull-right" style="margin-bottom: 10px;"><b>+</b> Fazer novo agendamento</button>
-                    <input type="text" class="pull-right input-right form-control" id="inputFiltra" style="width: 200px; margin-right: 20px;" placeholder="Filtrar por nome">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome do(a) cliente</th>
-                        <th>Procedimento</th>
-                        <th>Horário</th>
-                        <th>Dia</th>
-                        <th class="text-center">Opcões</th>
-                    </tr>
-                </thead>
-                <tbody id="linhas">
+    <div id="allTable">
+        <!-- Teste Tabela -->
+        <section>
+            <div class="row col-md-9 custyle">
+                <table class="table custab" id="custab">
+                    <thead>
+                        <button id="btnNew" class="btn btn-primary pull-right" style="margin-bottom: 10px;"><b>+</b> Fazer novo agendamento</button>
+                        <input type="text" class="pull-right input-right form-control" id="inputFiltra" style="width: 200px; margin-right: 20px;" placeholder="Filtrar por nome">
+                        <button id="btnFiltraSemana" class="btn btn-primary pull-right" style="margin-bottom: 10px; margin-right: 20px;"><b>→</b> Agendamentos da ultima semana</button>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome do(a) cliente</th>
+                            <th>Procedimento</th>
+                            <th>Horário</th>
+                            <th>Dia</th>
+                            <th class="text-center">Opcões</th>
+                        </tr>
+                    </thead>
+                    <tbody id="linhas">
 
-                </tbody>
-            </table>
-        </div>
-    </section>
-    <!-- Fim teste Tabela -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- Fim teste Tabela -->
 
-    <!-- Modal inicio -->
-    <section>
-        <div class="modal modaledit" id="modaledit" tabindex="-1" role="dialog">
+        <!-- Modal inicio -->
+        <section>
+            <div class="modal modaledit" id="modaledit" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content head">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Procedimento:</p>
+                            <select class="form-control" id="selProcedimento">
+                                <!-- selProcedimento -->
+                            </select>
+                            <p style="margin-top: 20px;">Dia:</p>
+                            <input id="dataInput" style="color: black; padding-left: 10px;" type="date">
+                            <p style="margin-top: 20px;">Horário:</p>
+                            <select class="form-control" id="selHorario">
+                                <!-- selHorario -->
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" data-dismiss="modal" id="btnSalvaEdit">Salvar edições</button>
+                            <button type="button" class="btn btn-success" data-dismiss="modal" id="btnAdiciona">Adicionar</button>
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Modal fim -->
+
+        <!-- Modal confirm -->
+        <div class="modal modalconfirm" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content head">
                     <div class="modal-header">
-                        <h5 class="modal-title"> </h5>
+                        <h5 class="modal-title">Modal title</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Procedimento:</p>
-                        <select class="form-control" id="selProcedimento">
-                            <!-- selProcedimento -->
-                        </select>
-                        <p style="margin-top: 20px;">Dia:</p>
-                        <input id="dataInput" style="color: black; padding-left: 10px;" type="date">
-                        <p style="margin-top: 20px;">Horário:</p>
-                        <select class="form-control" id="selHorario">
-                            <!-- selHorario -->
-                        </select>
+                        <p style="font-size: 20px;">Tem certeza que deseja cancelar o agendamento n: <label id="labelIdDelete"></label> ?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-dismiss="modal" id="btnSalvaEdit">Salvar edições</button>
-                        <button type="button" class="btn btn-success" data-dismiss="modal" id="btnAdiciona">Adicionar</button>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-danger" id="btnOkCancelaAgendamento">Cancelar agendamento</button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar janela</button>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Modal fim -->
+        <!-- Modal confirm -->
 
-    <!-- Modal confirm -->
-    <div class="modal modalconfirm" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content head">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p style="font-size: 20px;">Tem certeza que deseja cancelar o agendamento n: <label id="labelIdDelete"></label> ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="btnOkCancelaAgendamento">Cancelar agendamento</button>
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar janela</button>
-                </div>
-            </div>
-        </div>
+        <label for="" id="ultimaSemana"></label>
     </div>
-    <!-- Modal confirm -->
-
-    <label for="" id="ultimaSemana"></label>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js'></script>
+    
+    <div id="allChart" style="width: 500px; height: 500px; margin-left: 400px; margin-top: 50px; background-color: white; border-style: solid; border-color: #495057;">
+    <p style="color: black; margin: 10px;">Numero de agendamenos dos ultimos 7 dias</p>
+    <canvas id="myChart" width="400" height="370"></canvas>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
