@@ -39,13 +39,21 @@ class Dashboard_Model extends Model
         $idusuario = Session::get('idusuario');
         $tipo = Session::get('tipo');
 
+        $datahora = date_create()->format('Y-m-d') . " 00:00:00.0";
+
         $dados = array(
             ':idusuario' => $idusuario,
+            ":datahora" => $datahora
         );
-        $result = $this->db->select("SELECT a.id, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
-                                        JOIN braulinosdb.procedimento p ON a.procedimento = p.id
-                                        WHERE idusuario = :idusuario
-                                        ORDER BY a.data desc", $dados);
+        $result = $this->db->select("select c.idagendamento, c.idusuario, c.data, c.nomecompleto, c.nome, c.status, c.datahora, c.horario 
+                                    from (select b.idagendamento, b.idusuario, b.data, b.nomecompleto, b.nome, b.status, b.horario, convert(b.datahora, datetime) datahora 
+                                        from (select a.id idagendamento, u.id idusuario, a.data, u.nomecompleto, p.nome, a.status, a.horario, concat(a.`data`,' 00:00:00') as datahora 
+                                            from braulinosdb.agendamento a
+                                            join braulinosdb.procedimento p ON a.procedimento = p.id
+                                            join braulinosdb.usuario u ON a.idusuario = u.id) b) c
+                                            where c.datahora >= :datahora and
+                                                  idusuario = :idusuario
+                                            order by c.datahora asc", $dados);
 
         echo json_encode($result);
     }

@@ -12,6 +12,9 @@ $(document).ready(function () {
             toastr.warning(data);
         }
     });
+    $.post("listaUltimaSemana/").done(function (data) {
+        dados = JSON.parse(data);
+    });
 
     var down = false;
 

@@ -178,11 +178,11 @@ function carregaTabela() {
 
         for (var i = 0; i < dados.length; i++) {
             result += "<tr>";
-            result += "<td>" + dados[i].id + "</td>";
+            result += "<td>" + dados[i].idagendamento + "</td>";
             result += "<td>" + dados[i].nome + "</td>";
             result += "<td>" + dados[i].horario + "</td>";
             result += "<td>" + dateToBR(dados[i].data) + "</td>";
-            result += '<td class="text-center"><button onclick=editarItem(' + dados[i].id + '); class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Editar</button> <button onclick=excluirItemConfirm(' + dados[i].id + '); class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Cancelar</button></td>';
+            result += '<td class="text-center"><button onclick=editarItem(' + dados[i].idagendamento + '); class="btn btn-info btn-xs"><span class="glyphicon glyphicon-edit"></span> Editar</button> <button onclick=excluirItemConfirm(' + dados[i].idagendamento + '); class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Cancelar</button></td>';
             result += "</tr>";
         }
 

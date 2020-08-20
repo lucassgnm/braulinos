@@ -32,24 +32,57 @@ class Admin_Model extends Model
 
     public function listaAgendamentosCliente()
     {
-        $result = $this->db->select("SELECT a.id, u.nomecompleto, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
-                                        JOIN braulinosdb.procedimento p ON a.procedimento = p.id
-                                        JOIN braulinosdb.usuario u ON a.idusuario = u.id
-                                        ORDER BY a.data desc");
+        $datahora = date_create()->format('Y-m-d') . " 00:00:00.0";
+        $dados = array(
+            ":datahora" => $datahora
+        );
+        $result = $this->db->select("SELECT c.id, c.nomecompleto, c.nome, c.status, c.datahora, c.`data`, c.horario
+        from (select b.id, b.nomecompleto, b.nome, b.status, b.`data`, b.horario, convert(b.datahora, datetime) datahora 
+            from (select a.id, u.nomecompleto, p.nome, a.status, a.`data`, a.horario, concat(a.`data`,' 00:00:00') as datahora 
+                from braulinosdb.agendamento a
+                join braulinosdb.procedimento p ON a.procedimento = p.id
+                join braulinosdb.usuario u ON a.idusuario = u.id) b) c
+                where c.datahora >= :datahora
+                order by c.datahora asc", $dados);
 
         echo json_encode($result);
     }
 
+    public function listaUltimaSemana()
+    {
+        $datahora = date_create()->format('Y-m-d') . " 00:00:00.0";
+        $dados = array(
+            ":datahora" => $datahora
+        );
+        $result = $this->db->select("select c.id, c.nomecompleto, c.nome, c.status, c.datahora, c.horario 
+                                    from (select b.id, b.nomecompleto, b.nome, b.status, b.horario, convert(b.datahora, datetime) datahora 
+                                        from (select a.id, u.nomecompleto, p.nome, a.status, a.horario, concat(a.`data`,' 00:00:00') as datahora 
+                                            from braulinosdb.agendamento a
+                                            join braulinosdb.procedimento p ON a.procedimento = p.id
+                                            join braulinosdb.usuario u ON a.idusuario = u.id) b) c
+                                            where c.datahora < :datahora
+                                            order by c.datahora asc", $dados);
+
+        var_dump(json_encode($result));
+    }
+
     public function listaAgendamentosFiltro($filtro)
     {
+        $datahora = date_create()->format('Y-m-d') . " 00:00:00.0";
         $dados = array(
-            ":filtro" => $filtro."%"
+            ":datahora" => $datahora,
+            ":filtro" => $filtro . "%"
         );
-        $result = $this->db->select("SELECT a.id, u.nomecompleto, p.nome, a.horario, a.data FROM braulinosdb.agendamento a
-                                        JOIN braulinosdb.procedimento p ON a.procedimento = p.id
-                                        JOIN braulinosdb.usuario u ON a.idusuario = u.id
-                                        WHERE u.nomecompleto LIKE :filtro
-                                        ORDER BY a.data desc", $dados);
+        $result = $this->db->select("SELECT c.id, c.nomecompleto, c.nome, c.status, c.datahora, c.`data`, c.horario 
+        from (select b.id, b.nomecompleto, b.nome, b.status, b.`data`, b.horario, convert(b.datahora, datetime) datahora 
+            from (select a.id, u.nomecompleto, p.nome, a.status, a.`data`, a.horario, concat(a.`data`,' 00:00:00') as datahora 
+                from braulinosdb.agendamento a
+                join braulinosdb.procedimento p ON a.procedimento = p.id
+                join braulinosdb.usuario u ON a.idusuario = u.id) b) c
+                where c.datahora >= :datahora and
+                      c.nomecompleto LIKE :filtro
+                order by c.datahora asc", $dados);
+
         echo json_encode($result);
     }
 
